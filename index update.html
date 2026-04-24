@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Max Inglés — Profesor de inglés británico en Granada</title>
+  <meta name="description" content="Clases de inglés online con Max, profesor nativo británico que vive en Granada. Aprende inglés con alguien que entiende tu mundo. Reunión gratuita de 30 minutos." />
+  <meta name="keywords" content="profesor inglés online, clases inglés granada, profesor nativo inglés, inglés para hispanohablantes, preparación cambridge, IELTS online" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream:     #F5F0E8;
+      --warm-white:#FDFAF5;
+      --terracotta:#C4714A;
+      --terra-dark:#A05A38;
+      --terra-light:#E8A882;
+      --navy:      #1E2A3A;
+      --navy-mid:  #2E3F54;
+      --sand:      #D4C4A8;
+      --sand-light:#EAE2D4;
+      --text:      #2A2018;
+      --text-mid:  #5A4A3A;
+      --text-light:#8A7A6A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(253,250,245,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sand-light);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(30,42,58,0.08); }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--navy);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--terracotta); }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-mid);
+      font-size: 0.9rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--terracotta); }
+
+    .nav-cta {
+      background: var(--terracotta) !important;
+      color: white !important;
+      padding: 0.6rem 1.4rem !important;
+      border-radius: 2px;
+      font-weight: 500 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--terra-dark) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(196,113,74,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 4rem 6rem 6rem;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--terracotta);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+      font-weight: 500;
+      line-height: 1.18;
+      color: var(--navy);
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.01em;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      max-width: 440px;
+      margin-bottom: 2.8rem;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--terracotta);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2.2rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--terra-dark); transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .btn-secondary:hover { color: var(--terracotta); }
+    .btn-secondary svg { transition: transform 0.2s; }
+    .btn-secondary:hover svg { transform: translateX(3px); }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--sand);
+    }
+    .stat-item {}
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1.1s ease both;
+    }
+    .hero-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .hero-image-badge {
+      position: absolute;
+      bottom: 2.5rem; left: -1.5rem;
+      background: white;
+      padding: 1.2rem 1.6rem;
+      border-radius: 4px;
+      box-shadow: 0 8px 32px rgba(30,42,58,0.12);
+      animation: slideIn 1s 0.4s ease both;
+    }
+    .badge-stars { color: var(--terracotta); font-size: 0.85rem; letter-spacing: 2px; }
+    .badge-text {
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      margin-top: 0.3rem;
+    }
+    .badge-text strong { color: var(--navy); }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      background: var(--navy);
+      padding: 1.4rem 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3.5rem;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: var(--sand);
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.03em;
+    }
+    .trust-item svg { color: var(--terra-light); flex-shrink: 0; }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 6rem; }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1.2rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--terracotta);
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+    h2 em { font-style: italic; color: var(--terracotta); }
+
+    h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--navy);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      background: var(--warm-white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-wrap img {
+      width: 100%;
+      border-radius: 2px;
+      display: block;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .about-image-wrap::after {
+      content: '';
+      position: absolute;
+      top: 1.5rem; left: 1.5rem;
+      right: -1.5rem; bottom: -1.5rem;
+      border: 2px solid var(--sand);
+      border-radius: 2px;
+      z-index: -1;
+    }
+
+    .about-content p {
+      color: var(--text-mid);
+      margin-bottom: 1.3rem;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.85;
+    }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 2rem 0;
+    }
+    .tag {
+      background: var(--sand-light);
+      color: var(--text-mid);
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── SERVICES ── */
+    .services {
+      background: var(--cream);
+    }
+    .services-header {
+      max-width: 560px;
+      margin-bottom: 4rem;
+    }
+    .services-header p {
+      color: var(--text-mid);
+      margin-top: 1rem;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5px;
+      background: var(--sand);
+      border: 1.5px solid var(--sand);
+    }
+    .service-card {
+      background: var(--cream);
+      padding: 2.8rem;
+      transition: background 0.25s;
+      cursor: default;
+    }
+    .service-card:hover { background: var(--warm-white); }
+
+    .service-icon {
+      width: 42px; height: 42px;
+      background: var(--sand-light);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--terracotta);
+    }
+    .service-card p {
+      color: var(--text-mid);
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+    .service-badge {
+      display: inline-block;
+      background: var(--terracotta);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+      margin-top: 1rem;
+      text-transform: uppercase;
+    }
+
+    /* ── PRICING ── */
+    .pricing {
+      background: var(--navy);
+      text-align: center;
+    }
+    .pricing h2 { color: white; }
+    .pricing h2 em { color: var(--terra-light); }
+    .pricing .section-label { color: var(--terra-light); }
+    .pricing .section-label::before { background: var(--terra-light); }
+
+    .pricing-sub {
+      color: var(--sand);
+      margin-top: 0.8rem;
+      margin-bottom: 3.5rem;
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto 3.5rem;
+    }
+    .price-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .price-card:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(196,113,74,0.5);
+    }
+    .price-card.featured {
+      background: rgba(196,113,74,0.15);
+      border-color: var(--terracotta);
+    }
+    .price-card-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terra-light);
+      margin-bottom: 1.2rem;
+    }
+    .price-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 600;
+      color: white;
+      line-height: 1;
+    }
+    .price-amount span {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--sand);
+    }
+    .price-detail {
+      color: var(--sand);
+      font-size: 0.82rem;
+      margin-top: 0.5rem;
+      font-weight: 300;
+    }
+    .price-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin: 1.5rem 0;
+    }
+    .price-feature {
+      color: var(--sand);
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.9;
+    }
+
+    .pricing .btn-primary {
+      background: var(--terracotta);
+      font-size: 1rem;
+      padding: 1.1rem 2.8rem;
+    }
+
+    /* ── REVIEWS ── */
+    .reviews {
+      background: var(--warm-white);
+    }
+    .reviews-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+    }
+    .reviews-meta {
+      font-size: 0.88rem;
+      color: var(--text-light);
+      text-align: right;
+      font-weight: 300;
+    }
+    .reviews-meta strong {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--terracotta);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .review-card {
+      background: var(--cream);
+      padding: 2.2rem;
+      border-radius: 2px;
+      border-left: 3px solid transparent;
+      transition: border-color 0.25s;
+    }
+    .review-card:hover { border-left-color: var(--terracotta); }
+    .review-stars { color: var(--terracotta); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 1rem; }
+    .review-text {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 1.2rem;
+    }
+    .review-author {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.04em;
+    }
+    .review-source {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 0.2rem;
+    }
+
+    /* ── BOOKING ── */
+    .booking {
+      background: var(--cream);
+    }
+    .booking-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .booking-inner p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      font-weight: 300;
+      margin: 1.2rem 0 3rem;
+      line-height: 1.8;
+    }
+
+    .calendly-wrap {
+      background: white;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(30,42,58,0.08);
+      margin-top: 2rem;
+    }
+
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--warm-white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-info h2 { margin-bottom: 1.2rem; }
+    .contact-info p {
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--cream);
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.2s;
+    }
+    .contact-method:hover { background: var(--sand-light); }
+    .contact-method-icon {
+      width: 36px; height: 36px;
+      background: var(--sand-light);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--terracotta);
+      flex-shrink: 0;
+    }
+    .contact-method-label { font-size: 0.75rem; color: var(--text-light); }
+    .contact-method-value { font-size: 0.9rem; font-weight: 400; color: var(--text); }
+
+    .contact-form-wrap { padding-top: 0.5rem; }
+    .contact-form-wrap h3 { margin-bottom: 1.5rem; }
+
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    label { font-size: 0.8rem; font-weight: 500; color: var(--text-mid); letter-spacing: 0.04em; }
+    input, textarea, select {
+      border: 1.5px solid var(--sand);
+      background: var(--cream);
+      padding: 0.85rem 1rem;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: border-color 0.2s;
+      outline: none;
+      resize: vertical;
+    }
+    input:focus, textarea:focus { border-color: var(--terracotta); }
+    textarea { min-height: 110px; }
+
+    .form-submit {
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .form-submit:hover { background: var(--terra-dark); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      padding: 3.5rem 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .footer-logo span { color: var(--terra-light); }
+    .footer-tagline {
+      color: var(--sand);
+      font-size: 0.82rem;
+      font-weight: 300;
+      margin-top: 0.3rem;
+    }
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-links a {
+      color: var(--sand);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--terra-light); }
+    .footer-copy {
+      color: var(--text-light);
+      font-size: 0.78rem;
+      width: 100%;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── HAMBURGER / MOBILE ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--navy);
+      transition: all 0.3s;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 1.2rem 2.5rem; }
+      section { padding: 5rem 3rem; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-text { padding: 8rem 3rem 3rem; }
+      .hero-image { height: 480px; }
+      .hero-image-badge { left: 1.5rem; }
+      .about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-image-wrap { max-width: 400px; }
+      .contact { grid-template-columns: 1fr; gap: 3rem; }
+      .reviews-grid { grid-template-columns: 1fr 1fr; }
+      .pricing-cards { grid-template-columns: 1fr; max-width: 360px; }
+      .trust-bar { padding: 1.4rem 2rem; gap: 1.5rem; }
+      footer { padding: 3rem 2.5rem; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        background: var(--warm-white);
+        padding: 2rem;
+        border-bottom: 1px solid var(--sand-light);
+        gap: 1.2rem;
+      }
+      .hamburger { display: flex; }
+      section { padding: 4rem 1.8rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .reviews-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .reviews-meta { text-align: left; }
+      .hero-stats { gap: 1.5rem; }
+      .trust-bar { gap: 1rem; }
+      footer { flex-direction: column; }
+      .footer-links { flex-wrap: wrap; gap: 1rem; }
+      nav { padding: 1.2rem 1.8rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Max<span>Inglés</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#clases">Clases</a></li>
+      <li><a href="#precios">Precios</a></li>
+      <li><a href="#resenas">Reseñas</a></li>
+      <li><a href="#reservar" class="nav-cta">Reserva gratis</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero-text">
+      <span class="hero-eyebrow">Profesor nativo · Granada</span>
+      <h1>Inglés de verdad,<br>con alguien que<br><em>entiende tu mundo.</em></h1>
+      <p class="hero-sub">Soy Max, profe de inglés británico y vivo en Granada. Doy clases particulares online para hispanohablantes que quieren sentirse seguros hablando inglés — no solo estudiarlo.</p>
+      <div class="hero-actions">
+        <a href="#reservar" class="btn-primary">Reserva tu reunión gratis →</a>
+        <a href="#sobre-mi" class="btn-secondary">
+          Conóceme
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">29</div>
+          <div class="stat-label">Reseñas · 5 estrellas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Alumnos desde 2023</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Online · Google Meet</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="max.jpg" alt="Max — profesor de inglés en Granada" />
+      <div class="hero-image-badge">
+        <div class="badge-stars">★★★★★</div>
+        <div class="badge-text"><strong>29 reseñas verificadas</strong> en SuperProf</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Nativo británico · acento neutro
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Habla español · vive en España
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Clases individuales · 1 hora
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Primera reunión siempre gratis
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="sobre-mi">
+    <div class="about-image-wrap reveal">
+      <img src="max.jpg" alt="Max Ritchie — profesor de inglés" />
+    </div>
+    <div class="about-content reveal">
+      <span class="section-label">Sobre mí</span>
+      <h2>Hola, soy Max.</h2>
+      <br>
+      <p>Profe de inglés británico, granadino de adopción, y alguien que sabe muy bien lo que es intentar hablar otro idioma y que el cerebro no acompañe.</p>
+      <p>Nací en Londres y me crié en Escocia. En 2023 llegué a Granada — vine por amor, me quedé para siempre. Llevo aprendiendo español desde que aterricé, así que sé exactamente lo que sientes cuando las palabras no salen.</p>
+      <p>Eso cambia cómo enseño. No soy solo un hablante nativo que te corrige — soy alguien que entiende el proceso desde dentro.</p>
+      <div class="about-tags">
+        <span class="tag">Londres · Escocia</span>
+        <span class="tag">Basado en Granada</span>
+        <span class="tag">Habla español</span>
+        <span class="tag">Lic. Ciencias del Deporte</span>
+        <span class="tag">Experiencia en Australia</span>
+      </div>
+      <a href="#reservar" class="btn-primary">Reserva tu reunión gratuita →</a>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="clases">
+    <div class="services-header reveal">
+      <span class="section-label">Clases</span>
+      <h2>Pensadas para ti,<br><em>no para todos.</em></h2>
+      <p>No tengo un programa fijo. Cada alumno tiene una historia, un objetivo y un nivel distinto. Si tu situación no encaja exactamente en ninguna categoría, escríbeme — seguro que encontramos algo.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Conversación y fluidez</h3>
+        <p>¿Entiendes inglés pero te bloqueas cuando tienes que hablarlo? Trabajamos exactamente eso. Hablamos de temas que te interesan — viajes, trabajo, series, lo que sea.</p>
+        <div class="service-badge">Más popular</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Preparación de exámenes</h3>
+        <p>Cambridge (B2, C1, C2), IELTS, ENAIRE. Trabajamos el formato hasta que te resulte familiar y llegas al examen con confianza real.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <h3>Inglés profesional</h3>
+        <p>Reuniones, presentaciones, emails, negociaciones. Adapto las clases a tu entorno real — el vocabulario de tu industria y las situaciones que más te cuestan.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <h3>Gramática</h3>
+        <p>Desde nivel básico hasta C1, explicada de forma clara y sin tecnicismos innecesarios. En la mayoría de casos la combinamos con conversación.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="precios">
+    <span class="section-label">Precios</span>
+    <h2>Simple y <em>transparente.</em></h2>
+    <p class="pricing-sub">Sin sorpresas. Sin letra pequeña. Y la primera reunión es siempre gratis.</p>
+    <div class="pricing-cards">
+      <div class="price-card reveal">
+        <div class="price-card-label">Bono semanal</div>
+        <div class="price-amount">80<span>€/mes</span></div>
+        <div class="price-detail">4 clases · 1 por semana · 20€/clase</div>
+        <hr class="price-divider">
+        <div class="price-feature">1 clase de 1h por semana<br>Google Meet · individual<br>Materiales incluidos<br>Flexibilidad de horario</div>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-card-label">Bono intensivo</div>
+        <div class="price-amount">160<span>€/mes</span></div>
+        <div class="price-detail">8 clases · 2 por semana · 20€/clase</div>
+        <hr class="price-divider">
+        <div class="price-feature">2 clases de 1h por semana<br>Google Meet · individual<br>Materiales incluidos<br>Progreso más rápido</div>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-card-label">Primera reunión</div>
+        <div class="price-amount" style="font-size:2.2rem;">Gratis</div>
+        <div class="price-detail">30 minutos · sin compromiso</div>
+        <hr class="price-divider">
+        <div class="price-feature">Nos conocemos<br>Evaluamos tu nivel<br>Vemos qué necesitas<br>Sin presión de ningún tipo</div>
+      </div>
+    </div>
+    <a href="#reservar" class="btn-primary">Reserva tu reunión gratuita →</a>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews" id="resenas">
+    <div class="reviews-header reveal">
+      <div>
+        <span class="section-label">Reseñas</span>
+        <h2>Lo que dicen<br><em>mis alumnos.</em></h2>
+      </div>
+      <div class="reviews-meta">
+        <strong>★★★★★</strong>
+        29 reseñas verificadas · SuperProf
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Tras muchos profesores que solo ofrecían clases de conversación que no llevaban a nada, siento que al fin estoy haciendo grandes avances."</p>
+        <div class="review-author">Daniel</div>
+        <div class="review-source">Verificado · SuperProf</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Max ha sido un profesor estupendo durante estos dos años. Me siento competente ahora en inglés. Es un gran profe pero aún mejor persona."</p>
+        <div class="review-author">María</div>
+        <div class="review-source">Verificado · SuperProf</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Sus clases son muy productivas y divertidas. Da mucha confianza para que te sueltes con el inglés y que no dé tanto miedo."</p>
+        <div class="review-author">Yaiza</div>
+        <div class="review-source">Verificado · SuperProf</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Max marca un antes y un después en la forma en la que estamos acostumbrados a aprender inglés. Si te has dado por vencida con los idiomas, Max va a cambiar tu situación."</p>
+        <div class="review-author">Alejandro</div>
+        <div class="review-source">Verificado · SuperProf</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Habla muy bien el español y enseña muy bien inglés. Me costaban los verbos y desde que estoy con él he aprendido mucho y muy rápido."</p>
+        <div class="review-author">Carolina</div>
+        <div class="review-source">Verificado · SuperProf</div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Max es muy atento, siempre se preocupa de lo que quieres aprender. Hace que el inglés sea mucho más fácil. Súper recomendado."</p>
+        <div class="review-author">África</div>
+        <div class="review-source">Verificado · SuperProf</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="booking" id="reservar">
+    <div class="booking-inner">
+      <span class="section-label">Reserva</span>
+      <h2>Tu primera reunión,<br><em>completamente gratis.</em></h2>
+      <p>Elige el día y la hora que mejor te venga. Es solo una charla de 30 minutos para conocernos, hablar un poco de inglés y ver si encajamos — sin compromiso ni presión.</p>
+      <div class="calendly-wrap">
+        <!-- Calendly inline widget begin -->
+        <div class="calendly-inline-widget" data-url="https://calendly.com/maxritchie1995/30min" style="min-width:320px;height:700px;"></div>
+        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        <!-- Calendly inline widget end -->
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contacto">
+    <div class="contact-info reveal">
+      <span class="section-label">Contacto</span>
+      <h2>¿Tienes alguna<br><em>pregunta?</em></h2>
+      <p>Si quieres saber algo antes de reservar, escríbeme por WhatsApp o email y te respondo en menos de 24 horas.</p>
+      <div class="contact-methods">
+        <a href="mailto:maxprofedeingles@gmail.com" class="contact-method">
+          <div class="contact-method-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="contact-method-label">Email</div>
+            <div class="contact-method-value">maxprofedeingles@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://wa.me/34634099191" class="contact-method" target="_blank">
+          <div class="contact-method-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="contact-method-label">WhatsApp</div>
+            <div class="contact-method-value">+34 634 099 191</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form-wrap reveal">
+      <h3>O envíame un mensaje</h3>
+      <form name="contact" method="POST" data-netlify="true" action="/gracias">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="nivel">¿Cuál es tu nivel de inglés?</label>
+          <input type="text" id="nivel" name="nivel" placeholder="Ej: intermedio, básico, no lo sé..." />
+        </div>
+        <div class="form-group">
+          <label for="objetivo">¿Qué quieres conseguir con las clases?</label>
+          <textarea id="objetivo" name="objetivo" placeholder="Cuéntame un poco..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="disponibilidad">¿Cuál es tu disponibilidad?</label>
+          <input type="text" id="disponibilidad" name="disponibilidad" placeholder="Ej: tardes entre semana, fines de semana..." />
+        </div>
+        <button type="submit" class="form-submit">Enviar mensaje →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <a href="#" class="footer-logo">Max<span>Inglés</span></a>
+      <div class="footer-tagline">Inglés de verdad, con alguien que entiende tu mundo.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#clases">Clases</a></li>
+      <li><a href="#precios">Precios</a></li>
+      <li><a href="#resenas">Reseñas</a></li>
+      <li><a href="#reservar">Reservar</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 Max Inglés · maxingles.es · maxprofedeingles@gmail.com</div>
+  </footer>
+
+  <script>
+    // Sticky nav shadow
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
