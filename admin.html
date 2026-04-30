@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Max Inglés</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --warm-white: #FDFAF5;
+      --terracotta: #C4714A;
+      --terra-dark: #A05A38;
+      --terra-light: #E8A882;
+      --navy: #1E2A3A;
+      --navy-mid: #2E3F54;
+      --sand: #D4C4A8;
+      --sand-light: #EAE2D4;
+      --text: #2A2018;
+      --text-mid: #5A4A3A;
+      --text-light: #8A7A6A;
+      --success: #4A7C59;
+      --success-light: #E8F5EC;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); line-height: 1.7; min-height: 100vh; }
+
+    nav {
+      background: var(--navy);
+      padding: 1.2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: white; text-decoration: none; }
+    .nav-logo span { color: var(--terra-light); }
+    .nav-badge { background: rgba(196,113,74,0.3); border: 1px solid var(--terracotta); color: var(--terra-light); padding: 0.25rem 0.8rem; border-radius: 2px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+    .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); padding: 0.4rem 1rem; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { border-color: white; color: white; }
+
+    /* LOGIN */
+    .login-screen { min-height: calc(100vh - 64px); display: flex; align-items: center; justify-content: center; padding: 3rem; }
+    .login-card { background: var(--warm-white); border: 1.5px solid var(--sand); border-radius: 4px; padding: 3rem; width: 100%; max-width: 420px; box-shadow: 0 8px 40px rgba(30,42,58,0.08); }
+    .login-card h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--navy); margin-bottom: 0.4rem; }
+    .login-sub { color: var(--text-light); font-size: 0.85rem; margin-bottom: 2rem; font-weight: 300; }
+
+    label { display: block; font-size: 0.78rem; font-weight: 500; color: var(--text-mid); letter-spacing: 0.04em; margin-bottom: 0.4rem; text-transform: uppercase; }
+    input, textarea, select { width: 100%; border: 1.5px solid var(--sand); background: var(--cream); padding: 0.8rem 1rem; border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); transition: border-color 0.2s; outline: none; margin-bottom: 1rem; }
+    input:focus, textarea:focus, select:focus { border-color: var(--terracotta); }
+    textarea { min-height: 100px; resize: vertical; }
+
+    .btn-primary { background: var(--terracotta); color: white; border: none; padding: 0.9rem 1.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; border-radius: 2px; cursor: pointer; transition: background 0.2s; }
+    .btn-primary:hover { background: var(--terra-dark); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-primary.full { width: 100%; }
+    .btn-secondary { background: none; border: 1.5px solid var(--sand); color: var(--text-mid); padding: 0.7rem 1.4rem; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; border-radius: 2px; cursor: pointer; transition: all 0.2s; }
+    .btn-secondary:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .btn-danger { background: none; border: 1.5px solid #E8A8A8; color: #A05A5A; padding: 0.5rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; border-radius: 2px; cursor: pointer; transition: all 0.2s; }
+    .btn-danger:hover { background: #A05A5A; color: white; border-color: #A05A5A; }
+
+    .error-msg { background: #FDF0ED; border: 1px solid var(--terra-light); color: var(--terra-dark); padding: 0.8rem 1rem; border-radius: 2px; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+    .error-msg.show { display: block; }
+    .success-msg { background: var(--success-light); border: 1px solid #A8D5B5; color: var(--success); padding: 0.8rem 1rem; border-radius: 2px; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
+    .success-msg.show { display: block; }
+
+    /* MAIN ADMIN */
+    .admin-main { display: none; }
+    .admin-main.show { display: block; }
+    .login-screen.hide { display: none; }
+
+    .admin-header { background: var(--warm-white); border-bottom: 1.5px solid var(--sand); padding: 2rem 3rem; }
+    .admin-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--navy); }
+    .admin-header p { color: var(--text-light); font-size: 0.88rem; font-weight: 300; margin-top: 0.3rem; }
+
+    /* TABS */
+    .tab-bar { background: var(--warm-white); border-bottom: 1.5px solid var(--sand); padding: 0 3rem; display: flex; gap: 0; }
+    .tab-btn { background: none; border: none; padding: 1rem 1.5rem; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 400; color: var(--text-light); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab-btn.active { color: var(--terracotta); border-bottom-color: var(--terracotta); font-weight: 500; }
+    .tab-btn:hover:not(.active) { color: var(--text-mid); }
+
+    .tab-content { display: none; padding: 2.5rem 3rem; }
+    .tab-content.active { display: block; }
+
+    /* CARDS */
+    .card { background: var(--warm-white); border: 1.5px solid var(--sand); border-radius: 4px; padding: 2rem; margin-bottom: 1.5rem; }
+    .card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 500; color: var(--navy); margin-bottom: 1.5rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 0; }
+
+    .section-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .section-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--terracotta); }
+
+    /* TASK LIST */
+    .task-row { background: var(--cream); border: 1.5px solid var(--sand); border-radius: 2px; padding: 1.2rem 1.5rem; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .task-row-info h4 { font-size: 0.95rem; font-weight: 500; color: var(--navy); }
+    .task-row-info p { font-size: 0.8rem; color: var(--text-light); font-weight: 300; margin-top: 0.2rem; }
+    .task-row-actions { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
+    .active-dot { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 500; }
+    .active-dot::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+    .inactive-dot::before { background: var(--sand); }
+
+    /* STUDENTS */
+    .student-row { background: var(--cream); border: 1.5px solid var(--sand); border-radius: 2px; padding: 1.2rem 1.5rem; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .student-info h4 { font-size: 0.95rem; font-weight: 500; color: var(--navy); }
+    .student-info p { font-size: 0.8rem; color: var(--text-light); font-weight: 300; }
+    .level-pill { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 2px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+    .level-a { background: #EEF4FF; color: #3B5BDB; }
+    .level-b { background: #F0FFF4; color: #2F9E44; }
+    .level-c { background: #FFF9DB; color: #E67700; }
+
+    /* SUBMISSIONS */
+    .submission-row { background: var(--cream); border: 1.5px solid var(--sand); border-radius: 2px; padding: 1.5rem; margin-bottom: 1rem; }
+    .submission-row-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; gap: 1rem; }
+    .submission-row h4 { font-size: 0.95rem; font-weight: 500; color: var(--navy); }
+    .submission-row p { font-size: 0.8rem; color: var(--text-light); font-weight: 300; }
+    .submission-content-preview { background: var(--warm-white); border: 1px solid var(--sand); padding: 1rem; border-radius: 2px; font-size: 0.85rem; color: var(--text-mid); font-weight: 300; line-height: 1.7; margin-bottom: 1rem; }
+    .feedback-form textarea { margin-bottom: 0.8rem; min-height: 80px; }
+
+    /* LOADING */
+    .loading-wrap { display: flex; align-items: center; justify-content: center; padding: 3rem; }
+    .spinner { width: 28px; height: 28px; border: 2px solid var(--sand); border-top-color: var(--terracotta); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      nav, .admin-header, .tab-bar, .tab-content { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Max<span>Inglés</span></a>
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <span class="nav-badge">Admin Panel</span>
+      <button class="btn-logout" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <!-- LOGIN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <h1>Admin Login</h1>
+      <p class="login-sub">Max Inglés teacher dashboard</p>
+      <div class="error-msg" id="loginError">Incorrect credentials.</div>
+      <div>
+        <label>Email</label>
+        <input type="email" id="adminEmail" placeholder="maxprofedeingles@gmail.com" />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" id="adminPassword" onkeydown="if(event.key==='Enter') adminLogin()" />
+      </div>
+      <button class="btn-primary full" onclick="adminLogin()" id="loginBtn">Log in →</button>
+    </div>
+  </div>
+
+  <!-- ADMIN MAIN -->
+  <div class="admin-main" id="adminMain">
+    <div class="admin-header">
+      <h2>Teacher Dashboard</h2>
+      <p>Manage tasks, students, and submissions</p>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('tasks')">📋 Weekly Tasks</button>
+      <button class="tab-btn" onclick="showTab('submissions')">📥 Submissions</button>
+      <button class="tab-btn" onclick="showTab('students')">👥 Students</button>
+    </div>
+
+    <!-- TASKS TAB -->
+    <div class="tab-content active" id="tab-tasks">
+      <div class="card">
+        <h3>Post a new task</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Level</label>
+            <select id="taskLevel">
+              <option value="A1-A2">A1-A2 (Beginner)</option>
+              <option value="B1-B2" selected>B1-B2 (Intermediate)</option>
+              <option value="C1">C1 (Advanced)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Task type</label>
+            <select id="taskType">
+              <option value="reading">📖 Reading</option>
+              <option value="writing">✍️ Writing</option>
+              <option value="listening">🎧 Listening</option>
+              <option value="speaking">🎤 Speaking</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>Task title</label>
+          <input type="text" id="taskTitle" placeholder="e.g. Reading: The Future of AI" />
+        </div>
+        <div>
+          <label>Instructions for student</label>
+          <textarea id="taskInstructions" placeholder="Write the task instructions here. Be clear about what the student needs to do..."></textarea>
+        </div>
+        <div>
+          <label>YouTube video URL (optional)</label>
+          <input type="text" id="taskYoutube" placeholder="https://www.youtube.com/watch?v=..." />
+        </div>
+        <div>
+          <label>Article URL (optional)</label>
+          <input type="text" id="taskArticleUrl" placeholder="https://..." />
+        </div>
+        <div>
+          <label>Article title (optional)</label>
+          <input type="text" id="taskArticleTitle" placeholder="Title of the article" />
+        </div>
+        <div class="success-msg" id="taskSuccess">Task posted successfully!</div>
+        <div class="error-msg" id="taskError">Failed to post task. Please try again.</div>
+        <button class="btn-primary" onclick="postTask()">Post task →</button>
+      </div>
+
+      <div class="section-label">Active tasks</div>
+      <div id="taskList"><div class="loading-wrap"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- SUBMISSIONS TAB -->
+    <div class="tab-content" id="tab-submissions">
+      <div class="section-label">Pending feedback</div>
+      <div id="submissionList"><div class="loading-wrap"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- STUDENTS TAB -->
+    <div class="tab-content" id="tab-students">
+      <div class="card">
+        <h3>Create student account</h3>
+        <div class="form-row">
+          <div>
+            <label>Full name</label>
+            <input type="text" id="studentName" placeholder="e.g. María García" />
+          </div>
+          <div>
+            <label>Email address</label>
+            <input type="email" id="studentEmail" placeholder="student@email.com" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Level</label>
+            <select id="studentLevel">
+              <option value="A1-A2">A1-A2 (Beginner)</option>
+              <option value="B1-B2">B1-B2 (Intermediate)</option>
+              <option value="C1">C1 (Advanced)</option>
+            </select>
+          </div>
+          <div>
+            <label>Temporary password</label>
+            <input type="text" id="studentPassword" placeholder="They can change this later" />
+          </div>
+        </div>
+        <div class="success-msg" id="studentSuccess">Student account created! Send them their email and password.</div>
+        <div class="error-msg" id="studentError">Failed to create account.</div>
+        <button class="btn-primary" onclick="createStudent()">Create account →</button>
+      </div>
+
+      <div class="section-label">All students</div>
+      <div id="studentList"><div class="loading-wrap"><div class="spinner"></div></div></div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://ftypmeqvvuggorjzudlz.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_mQBSjHvJJLbO1iWD5ngVfA_13D1HJv-';
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const ADMIN_EMAIL = 'maxprofedeingles@gmail.com';
+
+    async function adminLogin() {
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true; btn.textContent = 'Logging in...';
+
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+      if (error || data.user.email !== ADMIN_EMAIL) {
+        document.getElementById('loginError').textContent = 'Access denied.';
+        document.getElementById('loginError').classList.add('show');
+        await db.auth.signOut();
+        btn.disabled = false; btn.textContent = 'Log in →';
+        return;
+      }
+      showAdmin();
+    }
+
+    async function logout() {
+      await db.auth.signOut();
+      document.getElementById('adminMain').classList.remove('show');
+      document.getElementById('loginScreen').classList.remove('hide');
+    }
+
+    function showAdmin() {
+      document.getElementById('loginScreen').classList.add('hide');
+      document.getElementById('adminMain').classList.add('show');
+      loadTasks(); loadSubmissions(); loadStudents();
+    }
+
+    function showTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    // ─── TASKS ────────────────────────────────────────────────────────
+    async function loadTasks() {
+      const { data: tasks } = await db.from('tasks').select('*').order('created_at', { ascending: false });
+      const container = document.getElementById('taskList');
+      if (!tasks || tasks.length === 0) { container.innerHTML = '<p style="color:var(--text-light); font-size:0.88rem;">No tasks yet.</p>'; return; }
+
+      container.innerHTML = tasks.map(t => `
+        <div class="task-row">
+          <div class="task-row-info">
+            <h4>${t.title}</h4>
+            <p>${t.level} · ${t.type} · ${new Date(t.created_at).toLocaleDateString('en-GB')}</p>
+          </div>
+          <div class="task-row-actions">
+            <span class="active-dot ${t.is_active ? '' : 'inactive-dot'}">${t.is_active ? 'Active' : 'Inactive'}</span>
+            <button class="btn-secondary" onclick="toggleTask('${t.id}', ${t.is_active})">${t.is_active ? 'Deactivate' : 'Activate'}</button>
+            <button class="btn-danger" onclick="deleteTask('${t.id}')">Delete</button>
+          </div>
+        </div>`).join('');
+    }
+
+    async function postTask() {
+      const task = {
+        level: document.getElementById('taskLevel').value,
+        type: document.getElementById('taskType').value,
+        title: document.getElementById('taskTitle').value.trim(),
+        instructions: document.getElementById('taskInstructions').value.trim(),
+        youtube_url: document.getElementById('taskYoutube').value.trim() || null,
+        article_url: document.getElementById('taskArticleUrl').value.trim() || null,
+        article_title: document.getElementById('taskArticleTitle').value.trim() || null,
+        is_active: true,
+      };
+      if (!task.title || !task.instructions) { alert('Please fill in the title and instructions.'); return; }
+
+      // Deactivate other tasks at this level first
+      await db.from('tasks').update({ is_active: false }).eq('level', task.level);
+
+      const { error } = await db.from('tasks').insert(task);
+      const successEl = document.getElementById('taskSuccess');
+      const errorEl = document.getElementById('taskError');
+      if (error) { errorEl.classList.add('show'); setTimeout(() => errorEl.classList.remove('show'), 3000); }
+      else {
+        successEl.classList.add('show');
+        setTimeout(() => successEl.classList.remove('show'), 3000);
+        ['taskTitle','taskInstructions','taskYoutube','taskArticleUrl','taskArticleTitle'].forEach(id => document.getElementById(id).value = '');
+        loadTasks();
+      }
+    }
+
+    async function toggleTask(id, current) {
+      await db.from('tasks').update({ is_active: !current }).eq('id', id);
+      loadTasks();
+    }
+    async function deleteTask(id) {
+      if (!confirm('Delete this task?')) return;
+      await db.from('tasks').delete().eq('id', id);
+      loadTasks();
+    }
+
+    // ─── SUBMISSIONS ─────────────────────────────────────────────────
+    async function loadSubmissions() {
+      const { data } = await db
+        .from('submissions')
+        .select('*, students(name, level), tasks(title)')
+        .is('feedback', null)
+        .order('submitted_at', { ascending: false });
+
+      const container = document.getElementById('submissionList');
+      if (!data || data.length === 0) { container.innerHTML = '<p style="color:var(--text-light); font-size:0.88rem;">No pending submissions — all caught up! ✓</p>'; return; }
+
+      container.innerHTML = data.map(s => {
+        const date = new Date(s.submitted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+        const contentHtml = s.audio_url
+          ? `<audio controls src="${s.audio_url}" style="width:100%; margin-bottom:1rem;"></audio>`
+          : `<div class="submission-content-preview">${s.content}</div>`;
+        return `
+          <div class="submission-row">
+            <div class="submission-row-header">
+              <div>
+                <h4>${s.students?.name || 'Student'}</h4>
+                <p>${s.students?.level} · ${s.tasks?.title || 'Task'} · Submitted ${date}</p>
+              </div>
+            </div>
+            ${contentHtml}
+            <div class="feedback-form">
+              <label>Your feedback</label>
+              <textarea id="feedback-${s.id}" placeholder="Write your feedback for ${s.students?.name?.split(' ')[0] || 'the student'}..."></textarea>
+              <button class="btn-primary" onclick="submitFeedback('${s.id}')">Send feedback →</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function submitFeedback(submissionId) {
+      const feedback = document.getElementById('feedback-' + submissionId).value.trim();
+      if (!feedback) { alert('Please write some feedback first.'); return; }
+      await db.from('submissions').update({ feedback, feedback_at: new Date().toISOString() }).eq('id', submissionId);
+      loadSubmissions();
+    }
+
+    // ─── STUDENTS ────────────────────────────────────────────────────
+    async function loadStudents() {
+      const { data } = await db.from('students').select('*').order('name');
+      const container = document.getElementById('studentList');
+      if (!data || data.length === 0) { container.innerHTML = '<p style="color:var(--text-light); font-size:0.88rem;">No students yet.</p>'; return; }
+
+      const levelClass = l => l.startsWith('A') ? 'level-a' : l.startsWith('B') ? 'level-b' : 'level-c';
+      container.innerHTML = data.map(s => `
+        <div class="student-row">
+          <div class="student-info">
+            <h4>${s.name}</h4>
+            <p>${s.email}</p>
+          </div>
+          <span class="level-pill ${levelClass(s.level)}">${s.level}</span>
+        </div>`).join('');
+    }
+
+    async function createStudent() {
+      const name = document.getElementById('studentName').value.trim();
+      const email = document.getElementById('studentEmail').value.trim();
+      const level = document.getElementById('studentLevel').value;
+      const password = document.getElementById('studentPassword').value.trim();
+      const successEl = document.getElementById('studentSuccess');
+      const errorEl = document.getElementById('studentError');
+
+      if (!name || !email || !password) { alert('Please fill in all fields.'); return; }
+
+      // Create auth user
+      const { data: authData, error: authError } = await db.auth.signUp({
+        email, password, options: { emailRedirectTo: null }
+      });
+
+      if (authError) {
+        errorEl.textContent = authError.message;
+        errorEl.classList.add('show');
+        setTimeout(() => errorEl.classList.remove('show'), 4000);
+        return;
+      }
+
+      // Create student profile
+      const { error: profileError } = await db.from('students').insert({
+        user_id: authData.user.id, name, email, level
+      });
+
+      if (profileError) {
+        errorEl.textContent = 'Auth created but profile failed. Contact support.';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      successEl.classList.add('show');
+      setTimeout(() => successEl.classList.remove('show'), 4000);
+      ['studentName','studentEmail','studentPassword'].forEach(id => document.getElementById(id).value = '');
+      loadStudents();
+    }
+
+    // ─── INIT ────────────────────────────────────────────────────────
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (session && session.user.email === ADMIN_EMAIL) showAdmin();
+    })();
+  </script>
+</body>
+</html>
