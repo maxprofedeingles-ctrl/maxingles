@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal — Max Inglés</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --warm-white: #FDFAF5;
+      --terracotta: #C4714A;
+      --terra-dark: #A05A38;
+      --terra-light: #E8A882;
+      --navy: #1E2A3A;
+      --navy-mid: #2E3F54;
+      --sand: #D4C4A8;
+      --sand-light: #EAE2D4;
+      --text: #2A2018;
+      --text-mid: #5A4A3A;
+      --text-light: #8A7A6A;
+      --success: #4A7C59;
+      --success-light: #E8F5EC;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(253,250,245,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sand-light);
+      padding: 1.2rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--navy);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--terracotta); }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-label {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+    }
+    .nav-student-name {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      font-weight: 500;
+    }
+    .btn-logout {
+      background: none;
+      border: 1.5px solid var(--sand);
+      color: var(--text-mid);
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { border-color: var(--terracotta); color: var(--terracotta); }
+
+    /* LOGIN SCREEN */
+    .login-screen {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-screen::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(196,113,74,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .login-card {
+      background: var(--warm-white);
+      border: 1.5px solid var(--sand);
+      border-radius: 4px;
+      padding: 3.5rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 8px 40px rgba(30,42,58,0.08);
+      animation: fadeUp 0.6s ease both;
+    }
+    .login-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1rem;
+    }
+    .login-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--terracotta);
+    }
+    .login-card h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .login-card h1 em { font-style: italic; color: var(--terracotta); }
+    .login-sub {
+      color: var(--text-light);
+      font-size: 0.88rem;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+    }
+    input[type="email"], input[type="password"], input[type="text"], textarea, select {
+      width: 100%;
+      border: 1.5px solid var(--sand);
+      background: var(--cream);
+      padding: 0.85rem 1rem;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--terracotta); }
+    textarea { min-height: 140px; resize: vertical; }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-primary:hover { background: var(--terra-dark); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .error-msg {
+      background: #FDF0ED;
+      border: 1px solid var(--terra-light);
+      color: var(--terra-dark);
+      padding: 0.8rem 1rem;
+      border-radius: 2px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    /* DASHBOARD */
+    .dashboard { display: none; }
+    .dashboard.show { display: block; }
+    .login-screen.hide { display: none; }
+
+    .dashboard-header {
+      background: var(--navy);
+      padding: 3rem 6rem;
+    }
+    .dashboard-header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .welcome-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terra-light);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .welcome-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--terra-light);
+    }
+    .dashboard-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .dashboard-header h2 em { font-style: italic; color: var(--terra-light); }
+    .level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(196,113,74,0.2);
+      border: 1px solid var(--terracotta);
+      color: var(--terra-light);
+      padding: 0.35rem 0.9rem;
+      border-radius: 2px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 1rem;
+    }
+
+    .dashboard-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 6rem;
+    }
+
+    /* TASK CARD */
+    .task-section { margin-bottom: 3rem; }
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1.2rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--terracotta);
+    }
+
+    .no-task {
+      background: var(--warm-white);
+      border: 1.5px solid var(--sand);
+      border-radius: 4px;
+      padding: 3rem;
+      text-align: center;
+    }
+    .no-task p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      font-weight: 300;
+    }
+
+    .task-card {
+      background: var(--warm-white);
+      border: 1.5px solid var(--sand);
+      border-radius: 4px;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+    .task-card-header {
+      padding: 2rem 2.5rem;
+      border-bottom: 1.5px solid var(--sand-light);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .task-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .task-type-badge.reading { background: #EEF4FF; color: #3B5BDB; }
+    .task-type-badge.writing { background: #F0FFF4; color: #2F9E44; }
+    .task-type-badge.listening { background: #FFF9DB; color: #E67700; }
+    .task-type-badge.speaking { background: #FFF0F6; color: #C2255C; }
+
+    .task-card-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.25;
+    }
+    .task-week {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+    }
+    .task-card-body { padding: 2.5rem; }
+    .task-instructions {
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.85;
+      margin-bottom: 2rem;
+      white-space: pre-line;
+    }
+
+    /* YouTube embed */
+    .youtube-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 2px;
+      margin-bottom: 2rem;
+      background: var(--navy);
+    }
+    .youtube-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Article link */
+    .article-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--cream);
+      border: 1.5px solid var(--sand);
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s;
+      margin-bottom: 2rem;
+    }
+    .article-link:hover { border-color: var(--terracotta); }
+    .article-link-icon {
+      width: 36px; height: 36px;
+      background: var(--sand-light);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--terracotta);
+      flex-shrink: 0;
+    }
+    .article-link-label { font-size: 0.75rem; color: var(--text-light); }
+    .article-link-text { font-size: 0.9rem; font-weight: 400; }
+
+    /* SUBMISSION AREA */
+    .submission-section {
+      border-top: 1.5px solid var(--sand-light);
+      padding: 2.5rem;
+    }
+    .submission-section h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .submission-sub {
+      color: var(--text-light);
+      font-size: 0.85rem;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    /* VOICE RECORDER */
+    .recorder-wrap {
+      background: var(--cream);
+      border: 1.5px solid var(--sand);
+      border-radius: 2px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .recorder-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .btn-record {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--terracotta);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-record:hover { background: var(--terra-dark); }
+    .btn-record.recording { background: #C0392B; animation: pulse 1.5s infinite; }
+    .btn-stop {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--navy);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-stop.show { display: flex; }
+    .recording-timer {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      font-weight: 300;
+    }
+    .recording-timer.active { color: #C0392B; font-weight: 500; }
+    audio {
+      width: 100%;
+      margin-top: 0.5rem;
+      border-radius: 2px;
+    }
+
+    .word-count {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      text-align: right;
+      margin-top: 0.3rem;
+      font-weight: 300;
+    }
+    .word-count span { color: var(--terracotta); font-weight: 500; }
+    .btn-submit-secondary {
+      background: none;
+      border: 1.5px solid var(--terracotta);
+      color: var(--terracotta);
+      padding: 0.85rem 1.8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      margin-top: 0.8rem;
+    }
+    .btn-submit-secondary:hover { background: var(--terracotta); color: white; }
+
+    .submitted-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--success-light);
+      border: 1.5px solid #A8D5B5;
+      padding: 1rem 1.5rem;
+      border-radius: 2px;
+      color: var(--success);
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+
+    /* PAST SUBMISSIONS */
+    .past-section { margin-top: 3rem; }
+    .submission-item {
+      background: var(--warm-white);
+      border: 1.5px solid var(--sand);
+      border-radius: 4px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 1rem;
+    }
+    .submission-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .submission-item h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--navy);
+    }
+    .submission-date {
+      font-size: 0.78rem;
+      color: var(--text-light);
+    }
+    .submission-content {
+      color: var(--text-mid);
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.8;
+      background: var(--cream);
+      padding: 1rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+    .feedback-wrap {
+      border-left: 3px solid var(--terracotta);
+      padding-left: 1rem;
+    }
+    .feedback-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 0.4rem;
+    }
+    .feedback-text {
+      color: var(--text-mid);
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+    .no-feedback {
+      color: var(--text-light);
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* LOADING */
+    .loading-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 2px solid var(--sand);
+      border-top-color: var(--terracotta);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .dashboard-header { padding: 2rem 1.5rem; }
+      .dashboard-body { padding: 2rem 1.5rem; }
+      .login-card { padding: 2rem; }
+      .task-card-header { flex-direction: column; }
+      .task-card-body, .submission-section { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Max<span>Inglés</span></a>
+    <div class="nav-right" id="navRight" style="display:none;">
+      <div>
+        <div class="nav-label">Logged in as</div>
+        <div class="nav-student-name" id="navStudentName">—</div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-eyebrow">Student Portal</div>
+      <h1>Welcome<br>back, <em>student.</em></h1>
+      <p class="login-sub">Log in to see this week's task and submit your work.</p>
+      <div class="error-msg" id="loginError">Incorrect email or password. Please try again.</div>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="loginEmail" placeholder="your@email.com" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter') login()" />
+      </div>
+      <button class="btn-primary" onclick="login()" id="loginBtn">Log in →</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+    <div class="dashboard-header">
+      <div class="dashboard-header-inner">
+        <div class="welcome-eyebrow">Student Portal</div>
+        <h2>Hello, <em id="studentFirstName">there</em>.</h2>
+        <p style="color: var(--sand); font-size: 0.9rem; font-weight: 300; margin-top: 0.5rem;">Here's your work for this week.</p>
+        <div class="level-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.5"/></svg>
+          Level: <span id="studentLevel">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-body">
+      <!-- CURRENT TASK -->
+      <div class="task-section">
+        <div class="section-label">This Week's Task</div>
+        <div id="taskContainer">
+          <div class="loading-wrap"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- PAST SUBMISSIONS -->
+      <div class="past-section">
+        <div class="section-label">Previous Submissions</div>
+        <div id="pastContainer">
+          <div class="loading-wrap"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── SUPABASE CONFIG ───────────────────────────────────────────────
+    const SUPABASE_URL = 'https://ftypmeqvvuggorjzudlz.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_mQBSjHvJJLbO1iWD5ngVfA_13D1HJv-';
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // ──────────────────────────────────────────────────────────────────
+
+    let currentStudent = null;
+    let currentTask = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordedBlob = null;
+    let timerInterval = null;
+    let seconds = 0;
+
+    // ─── AUTH ──────────────────────────────────────────────────────────
+    async function login() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
+      const errEl = document.getElementById('loginError');
+
+      if (!email || !password) {
+        errEl.textContent = 'Please enter your email and password.';
+        errEl.classList.add('show');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+      errEl.classList.remove('show');
+
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errEl.textContent = 'Incorrect email or password. Please try again.';
+        errEl.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Log in →';
+        return;
+      }
+
+      await loadDashboard(data.user);
+    }
+
+    async function logout() {
+      await db.auth.signOut();
+      currentStudent = null;
+      document.getElementById('loginScreen').classList.remove('hide');
+      document.getElementById('dashboard').classList.remove('show');
+      document.getElementById('navRight').style.display = 'none';
+      document.getElementById('loginPassword').value = '';
+    }
+
+    async function loadDashboard(user) {
+      // Get student profile
+      const { data: profile } = await db
+        .from('students')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!profile) {
+        document.getElementById('loginError').textContent = 'Account not found. Please contact Max.';
+        document.getElementById('loginError').classList.add('show');
+        document.getElementById('loginBtn').disabled = false;
+        document.getElementById('loginBtn').textContent = 'Log in →';
+        return;
+      }
+
+      currentStudent = profile;
+
+      // Update UI
+      document.getElementById('studentFirstName').textContent = profile.name.split(' ')[0];
+      document.getElementById('studentLevel').textContent = profile.level;
+      document.getElementById('navStudentName').textContent = profile.name;
+      document.getElementById('navRight').style.display = 'flex';
+      document.getElementById('loginScreen').classList.add('hide');
+      document.getElementById('dashboard').classList.add('show');
+
+      await loadCurrentTask();
+      await loadPastSubmissions();
+    }
+
+    // ─── TASKS ─────────────────────────────────────────────────────────
+    async function loadCurrentTask() {
+      const container = document.getElementById('taskContainer');
+
+      // Fetch individual task for this student (if any)
+      const { data: individualTask } = await db
+        .from('tasks')
+        .select('*')
+        .eq('student_id', currentStudent.id)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      // Fetch level task (no specific student assigned)
+      const { data: levelTask } = await db
+        .from('tasks')
+        .select('*')
+        .eq('level', currentStudent.level)
+        .eq('is_active', true)
+        .is('student_id', null)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      const tasks = [];
+      if (individualTask) tasks.push({ ...individualTask, isIndividual: true });
+      if (levelTask) tasks.push({ ...levelTask, isIndividual: false });
+
+      if (tasks.length === 0) {
+        container.innerHTML = `
+          <div class="no-task">
+            <p>No task set for this week yet — check back soon!</p>
+          </div>`;
+        return;
+      }
+
+      currentTask = tasks[0]; // keep reference to first task for legacy compat
+      container.innerHTML = '';
+
+      for (const task of tasks) {
+        // Check if already submitted
+        const { data: existing } = await db
+          .from('submissions')
+          .select('*')
+          .eq('student_id', currentStudent.id)
+          .eq('task_id', task.id)
+          .single();
+
+        const typeColors = { reading: 'reading', writing: 'writing', listening: 'listening', speaking: 'speaking' };
+        const typeLabel = task.type.charAt(0).toUpperCase() + task.type.slice(1);
+        const weekDate = new Date(task.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        let mediaHtml = '';
+        if (task.youtube_url) {
+          const videoId = extractYouTubeId(task.youtube_url);
+          mediaHtml = `<div class="youtube-wrap"><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>`;
+        }
+        if (task.article_url) {
+          mediaHtml += `
+            <a href="${task.article_url}" target="_blank" class="article-link">
+              <div class="article-link-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <div class="article-link-label">Read the article</div>
+                <div class="article-link-text">${task.article_title || task.article_url}</div>
+              </div>
+            </a>`;
+        }
+
+        const individualBadge = task.isIndividual
+          ? `<div style="display:inline-flex;align-items:center;gap:0.4rem;background:#FFF0F6;color:#C2255C;padding:0.25rem 0.7rem;border-radius:2px;font-size:0.72rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:1rem;">✦ Just for you</div>`
+          : '';
+
+        let submissionHtml = '';
+        const wcId = `wc_${task.id}`;
+        const textareaId = `writing_${task.id}`;
+
+        if (existing) {
+          submissionHtml = `
+            <div class="submission-section">
+              <div class="submitted-badge">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Submitted! I'll leave you some feedback soon!
+              </div>
+            </div>`;
+        } else if (task.type === 'writing') {
+          submissionHtml = `
+            <div class="submission-section">
+              <h4>Your submission</h4>
+              <p class="submission-sub">Write your answer below and click submit when you're ready.</p>
+              <textarea id="${textareaId}" placeholder="Write your answer here..." oninput="updateWordCount(this, '${wcId}')"></textarea>
+              <div class="word-count">Words: <span id="${wcId}">0</span></div>
+              <button class="btn-primary" onclick="submitWriting('${task.id}', '${textareaId}')">Submit →</button>
+            </div>`;
+        } else if (task.type === 'speaking') {
+          submissionHtml = `
+            <div class="submission-section">
+              <h4>Your voice note</h4>
+              <p class="submission-sub">Record your answer directly in the browser. Press record when you're ready.</p>
+              <div class="recorder-wrap">
+                <div class="recorder-controls">
+                  <button class="btn-record" id="btnRecord_${task.id}" onclick="startRecording('${task.id}')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+                    Record
+                  </button>
+                  <button class="btn-stop" id="btnStop_${task.id}" onclick="stopRecording('${task.id}')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                    Stop
+                  </button>
+                  <span class="recording-timer" id="recordingTimer_${task.id}">0:00</span>
+                </div>
+                <audio id="audioPlayback_${task.id}" controls style="display:none;"></audio>
+              </div>
+              <button class="btn-submit-secondary" id="btnSubmitVoice_${task.id}" onclick="submitVoice('${task.id}')" style="display:none;">Submit voice note →</button>
+            </div>`;
+        } else {
+          submissionHtml = `
+            <div class="submission-section">
+              <h4>Your answers</h4>
+              <p class="submission-sub">Answer the questions above in the box below.</p>
+              <textarea id="${textareaId}" placeholder="Write your answers here..." oninput="updateWordCount(this, '${wcId}')"></textarea>
+              <div class="word-count">Words: <span id="${wcId}">0</span></div>
+              <button class="btn-primary" onclick="submitWriting('${task.id}', '${textareaId}')">Submit answers →</button>
+            </div>`;
+        }
+
+        container.innerHTML += `
+          <div class="task-card" style="margin-bottom:1.5rem;">
+            <div class="task-card-header">
+              <div>
+                ${individualBadge}
+                <h3>${task.title}</h3>
+                <div class="task-week">Week of ${weekDate}</div>
+              </div>
+              <span class="task-type-badge ${typeColors[task.type]}">${typeLabel}</span>
+            </div>
+            <div class="task-card-body">
+              ${mediaHtml}
+              <div class="task-instructions">${task.instructions}</div>
+            </div>
+            ${submissionHtml}
+          </div>`;
+      }
+    }
+
+    async function loadPastSubmissions() {
+      const container = document.getElementById('pastContainer');
+
+      const { data: submissions } = await db
+        .from('submissions')
+        .select('*, tasks(title, type, created_at)')
+        .eq('student_id', currentStudent.id)
+        .order('submitted_at', { ascending: false })
+        .limit(10);
+
+      if (!submissions || submissions.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-light); font-size: 0.88rem; font-weight: 300;">No submissions yet — complete your first task above!</p>`;
+        return;
+      }
+
+      container.innerHTML = submissions.map(s => {
+        const date = new Date(s.submitted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+        const contentHtml = s.audio_url
+          ? `<audio controls src="${s.audio_url}" style="width:100%; margin-bottom: 1rem;"></audio>`
+          : `<div class="submission-content">${s.content}</div>`;
+
+        const feedbackHtml = s.feedback
+          ? `<div class="feedback-wrap"><div class="feedback-label">My feedback</div><div class="feedback-text">${s.feedback}</div></div>`
+          : `<div class="no-feedback">I haven't left feedback yet — check back soon!</div>`;
+
+        return `
+          <div class="submission-item">
+            <div class="submission-item-header">
+              <h4>${s.tasks?.title || 'Task'}</h4>
+              <span class="submission-date">Submitted ${date}</span>
+            </div>
+            ${contentHtml}
+            ${feedbackHtml}
+          </div>`;
+      }).join('');
+    }
+
+    // ─── SUBMISSIONS ───────────────────────────────────────────────────
+    const EDGE_URL = 'https://ftypmeqvvuggorjzudlz.supabase.co/functions/v1/send-notification';
+
+    async function notifyTeacher(taskId, content, audioUrl) {
+      try {
+        const { data: task } = await db.from('tasks').select('title, type').eq('id', taskId).single();
+        await fetch(EDGE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'teacher_submission',
+            studentName: currentStudent.name,
+            taskTitle: task?.title || 'a task',
+            taskType: task?.type || 'writing',
+            submissionContent: content || '',
+            audioUrl: audioUrl || ''
+          })
+        });
+      } catch(e) { console.warn('Teacher notification failed:', e); }
+    }
+
+    async function submitWriting(taskId, textareaId) {
+      const content = document.getElementById(textareaId || 'writingSubmission').value.trim();
+      if (!content) { alert('Please write something before submitting.'); return; }
+
+      const { error } = await db.from('submissions').insert({
+        student_id: currentStudent.id,
+        task_id: taskId,
+        content: content,
+        submitted_at: new Date().toISOString()
+      });
+
+      if (!error) {
+        await notifyTeacher(taskId, content, null);
+        await loadCurrentTask();
+      }
+    }
+
+    async function startRecording(taskId) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          recordedBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          const url = URL.createObjectURL(recordedBlob);
+          const audio = document.getElementById('audioPlayback');
+          audio.src = url;
+          audio.style.display = 'block';
+          document.getElementById('btnSubmitVoice').style.display = 'block';
+        };
+        mediaRecorder.start();
+
+        document.getElementById('btnRecord').style.display = 'none';
+        document.getElementById('btnStop').classList.add('show');
+        seconds = 0;
+        timerInterval = setInterval(() => {
+          seconds++;
+          const m = Math.floor(seconds / 60);
+          const s = seconds % 60;
+          const timer = document.getElementById('recordingTimer');
+          timer.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+          timer.classList.add('active');
+        }, 1000);
+      } catch(e) {
+        alert('Could not access microphone. Please check your browser permissions.');
+      }
+    }
+
+    function stopRecording() {
+      if (mediaRecorder) mediaRecorder.stop();
+      clearInterval(timerInterval);
+      document.getElementById('btnStop').classList.remove('show');
+      document.getElementById('btnRecord').style.display = 'flex';
+      document.getElementById('recordingTimer').classList.remove('active');
+    }
+
+    async function submitVoice(taskId) {
+      if (!recordedBlob) { alert('Please record something first.'); return; }
+
+      const filename = `${currentStudent.id}/${taskId}/${Date.now()}.webm`;
+      const { data: uploadData, error: uploadError } = await db.storage
+        .from('voice-notes')
+        .upload(filename, recordedBlob);
+
+      if (uploadError) { alert('Upload failed. Please try again.'); return; }
+
+      const { data: { publicUrl } } = db.storage.from('voice-notes').getPublicUrl(filename);
+
+      const { error } = await db.from('submissions').insert({
+        student_id: currentStudent.id,
+        task_id: taskId,
+        audio_url: publicUrl,
+        submitted_at: new Date().toISOString()
+      });
+
+      if (!error) {
+        await notifyTeacher(taskId, null, publicUrl);
+        await loadCurrentTask();
+      }
+    }
+
+    // ─── UTILS ─────────────────────────────────────────────────────────
+    function extractYouTubeId(url) {
+      const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+      return match ? match[1] : '';
+    }
+
+    // ─── WORD COUNT ──────────────────────────────────────────────────────
+    function updateWordCount(textarea, spanId) {
+      const words = textarea.value.trim() === '' ? 0 : textarea.value.trim().split(/\s+/).length;
+      const el = document.getElementById(spanId);
+      if (el) el.textContent = words;
+    }
+
+    // ─── INIT ──────────────────────────────────────────────────────────
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (session) await loadDashboard(session.user);
+    })();
+  </script>
+</body>
+</html>
