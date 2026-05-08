@@ -4,7 +4,8 @@
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "students.html", "use": "@vercel/static" },
     { "src": "admin.html", "use": "@vercel/static" },
-    { "src": "sitemap.xml", "use": "@vercel/static" }
+    { "src": "sitemap.xml", "use": "@vercel/static" },
+    { "src": "favicon.svg", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/$1" }
